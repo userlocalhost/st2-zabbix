@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import sys
 from st2client.base import BaseCLIApp
 
 from optparse import OptionParser
@@ -31,6 +30,7 @@ class ZabbixDispatcher(BaseCLIApp):
         # send request to st2api to dispatch trigger of Zabbix
         self.client.managers['Webhook'].client.post('/webhooks/st2', body)
 
+
 def get_options():
     parser = OptionParser()
 
@@ -48,14 +48,14 @@ def get_options():
                       help="'Default message' value from action configuration of Zabbix")
     parser.add_option('--skip-config', dest="skip_config", default=False, action='store_true',
                       help='Do NOT parse and use the CLI config file')
-    parser.add_option('--config-file', dest="config_file", 
+    parser.add_option('--config-file', dest="config_file",
                       help='Path to the CLI config file')
 
     # Zabbix send argument as one string even though it includes whitespace
     # (like $ st2_dispatch.py "foo bar" "hoge fuga" ...).
     # And we can't specify keyward argument, we can only specify args.
-    # 
-    # So it's hard for us to parse the argument of zabbix mediatype using optparse. 
+    #
+    # So it's hard for us to parse the argument of zabbix mediatype using optparse.
     # Then, I decided to fix the order of the CLI arguemnts.
     arg_list = ['st2_host', 'st2_userid', 'st2_passwd',
                 'alert_sendto', 'alert_subject', 'alert_message']
@@ -68,6 +68,7 @@ def get_options():
 
     return (options, args[len(arg_list):])
 
+
 def main():
     # parse and get arguemnts
     (options, args) = get_options()
@@ -77,6 +78,7 @@ def main():
 
     # dispatch trigger of zabbix.event_handler
     dispatcher.dispatch_trigger(args)
+
 
 if __name__ == '__main__':
     main()
